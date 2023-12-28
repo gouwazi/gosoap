@@ -185,6 +185,10 @@ func (c *Client) Do(req *Request) (res *Response, err error) {
 		return nil, err
 	}
 
+	// replace "$lt;" and "$gt;" with "<" and ">"
+	p.Payload = bytes.Replace(p.Payload, []byte("&lt;"), []byte("<"), -1)
+	p.Payload = bytes.Replace(p.Payload, []byte("&gt;"), []byte(">"), -1)
+
 	b, err := p.doRequest(c.Definitions.Services[0].Ports[0].SoapAddresses[0].Location)
 	if err != nil {
 		return nil, ErrorWithPayload{err, p.Payload}
